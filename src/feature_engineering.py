@@ -148,12 +148,13 @@ def impute_age(panel_data, age_median):
 
 
 def select_columns(panel_data):
-    """Reduce panel data to final column set."""
-    cols = ['Name', 'Year'] + config.FEATURES + ['Churns']
+    """Reduce panel data to final column set, as well as columns used to disambiguate lifters with the same name"""
+    cols = ['Name', 'Year'] + config.FEATURES + ['Churns'] + ['Sex', 'Federation', 'Country', 'WeightClassKg']
     return panel_data.loc[:, cols]
 
 
-def build_panel_data(cleaned, full_history):
+
+def build_panel_data(cleaned, full_history, british_pl = True ):
     """
     Full feature engineering pipeline. Takes cleaned competition history and full history
     dataframes and returns panel data ready for modelling.
@@ -171,9 +172,9 @@ def build_panel_data(cleaned, full_history):
     df_sorted = add_time_since_last_pb(df_sorted, full_history)
     df_sorted = add_goodlift_features(df_sorted)
 
+
     panel_data = to_panel_data(df_sorted)
     panel_data, last_complete_year = add_churn_target(panel_data)
     panel_data = impute_age(panel_data, panel_data['Age'].median())
     panel_data = select_columns(panel_data)
-
     return panel_data, last_complete_year

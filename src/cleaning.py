@@ -8,7 +8,8 @@ COLUMNS = [
     'BodyweightKg', 'WeightClassKg', 'Best3SquatKg', 'Best3BenchKg',
     'Best3DeadliftKg', 'Equipment', 'Event', 'Squat1Kg', 'Squat2Kg',
     'Squat3Kg', 'Bench1Kg', 'Bench2Kg', 'Bench3Kg', 'Deadlift1Kg',
-    'Deadlift2Kg', 'Deadlift3Kg', 'TotalKg', 'Goodlift', 'Sanctioned'
+    'Deadlift2Kg', 'Deadlift3Kg', 'TotalKg', 'Goodlift', 'Sanctioned',
+    'Country'
 ]
 
 current_year = datetime.now().year

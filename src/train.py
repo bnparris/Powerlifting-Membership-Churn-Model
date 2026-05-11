@@ -21,8 +21,10 @@ def train():
 
     #train on all available data
     print('Training model')
+
     train_X = panel_data[config.FEATURES]
     train_y = panel_data['Churns']
+    
 
     clf = HistGradientBoostingClassifier(
         learning_rate=config.FINAL_PARAMS['learning_rate'],

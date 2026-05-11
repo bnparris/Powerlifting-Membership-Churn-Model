@@ -6,4 +6,5 @@ notebooks/lightgbm.ipynb
 notebooks/select_from_model.ipynb
 notebooks/02_eda3.ipynb
 models/
+deploy_env/
 
