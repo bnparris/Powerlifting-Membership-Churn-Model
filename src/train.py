@@ -1,6 +1,9 @@
 import pandas as pd
 import joblib
 from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.calibration import CalibratedClassifierCV
+from sklearn.frozen import FrozenEstimator
+
 
 import sys
 from pathlib import Path
@@ -22,9 +25,10 @@ def train():
     #train on all available data
     print('Training model')
 
-    train_X = panel_data[config.FEATURES]
-    train_y = panel_data['Churns']
-    
+    train_X = panel_data.loc[panel_data['Year'] <last_complete_year ,config.FEATURES]
+    train_y = panel_data.loc[panel_data['Year'] <last_complete_year,'Churns']
+    calibrate_X = panel_data.loc[panel_data['Year']==last_complete_year, config.FEATURES]
+    calibrate_y = panel_data.loc[panel_data['Year'] == last_complete_year, 'Churns']
 
     clf = HistGradientBoostingClassifier(
         learning_rate=config.FINAL_PARAMS['learning_rate'],
@@ -37,7 +41,10 @@ def train():
 
     clf.fit(train_X, train_y)
 
-    joblib.dump(clf, config.MODEL_PATH)
+    calibrated_clf = CalibratedClassifierCV(FrozenEstimator(clf), method ='sigmoid')
+    calibrated_clf.fit(calibrate_X, calibrate_y)
+
+    joblib.dump(calibrated_clf, config.MODEL_PATH)
 
 
     metadata = {
