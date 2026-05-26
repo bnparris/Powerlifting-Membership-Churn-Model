@@ -1,6 +1,7 @@
 # Powerlifting Churn Prediction
 
-Predicts whether a competitive powerlifter will stop competing the following year, using data from https://openpowerlifting.gitlab.io/opl-csv/files/openipf-latest.zip[OpenPowerlifting]. Built for the IPF and affiliated federations, covering sanctioned raw full-power competitions from 2015 onwards.
+Predicts whether a competitive powerlifter will stop competing the following year, using data from https://openpowerlifting.gitlab.io/opl-csv/files/openipf-latest.zip[OpenPowerlifting]. The model is designed to do this based  Built for the IPF and affiliated federations, covering sanctioned raw full-power competitions from 2015 onwards.
+
 
 A gradient boosting classifier is trained on engineered features capturing each lifter's competitive history. The model outputs per-lifter churn probabilities for 2026.
 
@@ -13,7 +14,7 @@ A gradient boosting classifier is trained on engineered features capturing each 
 │   ├── raw/              # OpenPowerlifting source data
 │   ├── processed/        # Cleaned and transformed data
 │   └── production/       # Panel data and predictions for current season
-├── notebooks/            # Exploratory analysis and modelling decisions
+├── notebooks/            # Modelling decisions and evaluation
 ├── src/
 │   ├── cleaning.py
 │   ├── feature_engineering.py
@@ -28,7 +29,7 @@ The `.py` files contain the production pipeline. The notebooks document the deci
 
 ## Overview & Key Decisions
 
-The target variable is whether a lifter competes in the year following the most recent "complete" calendar year (with a year defined as "complete" from December 7th onwards. This can be changed in XXX). The pipeline is designed to be run at the end of the calendar year to make predictions about who will renew their powerlifting membership, as membership operates on a calendar-year basis. Data is aggregated such that each row represents a unique combination of lifter and year. Features are computed based on lifter competition history up until the end of the year specified in the `Year` column. 
+The target variable is whether a lifter competes in the year following the most recent "complete" calendar year (with a year defined as "complete" from December 7th onwards. The pipeline is designed to be run at the end of the calendar year to make predictions about who will renew their powerlifting membership, as membership operates on a calendar-year basis. Data is aggregated such that each row represents a unique combination of lifter and year. Features are computed based on lifter competition history up until the end of the year specified in the `Year` column. 
 
 **Pre-2015 history**: OpenPowerlifting data prior to 2015 is used for feature lookups only, ensuring time competing and personal best recency are computed correctly for lifters whose careers predate the modelling window.
 
@@ -44,15 +45,7 @@ The target variable is whether a lifter competes in the year following the most 
 
 ## Model Performance
 
-| Metric | Score |
-|--------|-------|
-| Accuracy | |
-| ROC-AUC | |
-| F1 | |
-| Precision | |
-| Recall | |
-
-*Evaluated on held-out test set (2024 season).*
+Model performance was primarily evaluated by calculating expected profit from offering retention interventions, after optimising the threshold above which retention interventions should be offered to lifters This can be seen in `notebooks\07_decision_framework.ipynb` and `notebooks\08_test.ipynb`.
 
 ---
 
@@ -68,11 +61,8 @@ Requires `config.py` — see `config.example.py`.
 
 ## Limitations and Future Improvements
 
-Accuracy was used as the evaluation metric for feature selection on the validation set and hyperparameter tuning, assuming equal misclassification costs. In retrospect ROC-AUC would have been more appropriate given that the optimal decision threshold for retention interventions depends on the probabilities outputted by the model. Using ROC-AUC would have meant that a decision threshold was not assumed in the training process.
+Accuracy was used as the evaluation metric for feature selection on the validation set and hyperparameter tuning, assuming equal misclassification costs prior to implementing the decision framework. In retrospect, log loss would have been more appropriate given that the decision framework uses probabilities to determine which lifters to offer retention interventions to. However, the model was found to be well calibrated after calibrating on the validation set despite using accuracy for decision making rather than logloss.
 
-Year column included in hyperparameter tuning to allow for cross validation splits to be done using Year column but not used as a feature in the model. Permutation importance on Year column was found to be 0 so its inclusion is unlikely to AFFECT?EFFECT? model accuracy and therefore unlikely to influence selection of hyperparameters. Year was not included as a feature in the final model as it would add noise due to permutation importance being 0. 
+The decision framework assumed the retention interventions had a constant save rate of $S = 0.15$ (with this assumption being adjusted after the first year of offering interventions using an estimate from the control group). This could be improved upon by using uplift modelling to determine the probability that a retention intervention causes individual churners to stay, rather than using a constant average save rate.
 
-
-
-
-Currently, retraining is manual. Retraining could be automated using GitHub Actions workflow that downloads the latest OpenPowerlifting dataset. 
+Currently, retraining is manual. Retraining could be automated using GitHub Actions workflow that downloads the latest OpenPowerlifting dataset and automatically trigger the retraining pipeline.
