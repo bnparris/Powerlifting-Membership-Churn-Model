@@ -20,10 +20,13 @@ def generate_predictions():
     X = panel_rows[features]
     pred = model.predict(X)
     probs = model.predict_proba(X)[:, 1]
+
+
     predictions_df = panel_rows[['Name']].copy()
-    predictions_df['ChurnPrediction'] = pred
     predictions_df['ChurnProbability'] = probs
+    predictions_df['OfferIntervention'] = (predictions_df['ChurnProbability'] > 0.62).astype(int)
     predictions_path = config.PREDICTIONS_DIR / f"predictions_for_{last_complete_year +1}.csv"
+    print(predictions_df.columns)
     predictions_df.to_csv(predictions_path, index=False)
     
 if __name__ == '__main__':
