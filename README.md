@@ -1,6 +1,6 @@
 # Powerlifting Churn Prediction
 
-Predicts whether a competitive powerlifter will stop competing the following year, using data from https://openpowerlifting.gitlab.io/opl-csv/files/openipf-latest.zip[OpenPowerlifting]. The model is designed to do this based  Built for the IPF and affiliated federations, covering sanctioned raw full-power competitions from 2015 onwards.
+Predicts whether a competitive powerlifter will stop competing the following year, using data from https://openpowerlifting.gitlab.io/opl-csv/files/openipf-latest.zip[OpenPowerlifting]. The model is built for the IPF and affiliated federations, covering sanctioned raw full-power competitions from 2015 onwards.
 
 
 A gradient boosting classifier is trained on engineered features capturing each lifter's competitive history. The model outputs per-lifter churn probabilities for 2026.
