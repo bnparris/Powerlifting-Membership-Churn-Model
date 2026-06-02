@@ -16,7 +16,7 @@ import json
 
 
 def train():
-    df = pd.read_csv(config.DB_LOCATION)
+    df = pd.read_csv(config.DB_LOCATION, low_memory = False)
     print('Building panel data')
     cleaned, full_history = clean(df)
     panel_data, last_complete_year = build_panel_data(cleaned, full_history)
@@ -27,8 +27,9 @@ def train():
 
     train_X = panel_data.loc[panel_data['Year'] <last_complete_year ,config.FEATURES]
     train_y = panel_data.loc[panel_data['Year'] <last_complete_year,'Churns']
-    calibrate_X = panel_data.loc[panel_data['Year']==last_complete_year, config.FEATURES]
-    calibrate_y = panel_data.loc[panel_data['Year'] == last_complete_year, 'Churns']
+    calibrate_X = panel_data.loc[panel_data['Year'] == last_complete_year - 1, config.FEATURES]
+    calibrate_y = panel_data.loc[panel_data['Year'] == last_complete_year - 1, 'Churns']
+
 
     clf = HistGradientBoostingClassifier(
         learning_rate=config.FINAL_PARAMS['learning_rate'],
