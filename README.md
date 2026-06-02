@@ -3,7 +3,7 @@
 Predicts whether a competitive powerlifter will stop competing the following year, using data from https://openpowerlifting.gitlab.io/opl-csv/files/openipf-latest.zip[OpenPowerlifting]. The model is built for the IPF and affiliated federations, covering sanctioned raw full-power competitions from 2015 onwards.
 
 
-A gradient boosting classifier is trained on engineered features capturing each lifter's competitive history. The model outputs per-lifter churn probabilities for 2026, as well as whether the 'retention intervention' (a half-price coaching session if the lifter renews their membership) should be offered to the lifter. This is based on the decision framework in `notebooks\07_decision_framework.ipynb`
+A gradient boosting classifier is trained on engineered features capturing each lifter's competitive history. The model outputs per-lifter churn probabilities for 2026, as well as whether the 'retention intervention' (a half-price coaching session if the lifter renews their membership) should be offered to the lifter. This is based on the decision framework in `notebooks\07_decision_framework.ipynb`.
 
 ---
 
