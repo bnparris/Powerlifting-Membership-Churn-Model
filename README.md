@@ -57,7 +57,7 @@ python src/train.py
 python src/predict.py
 ```
 
-Requires `config.py` — see `config.example.py`.
+Requires `config.py`
 
 ## Limitations and Future Improvements
 
