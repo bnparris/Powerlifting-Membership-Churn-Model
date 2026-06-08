@@ -23,13 +23,11 @@ PREDICTIONS_DIR = PROJECT_ROOT/ 'data'/ 'predictions'
 #used in notebooks but not used in final pipeline. left here as notebooks share same config.py
 CAP_MEETS_SINCE_BOMBOUT = 999
 
-FEATURES = [
-    'TimeSinceLastPBYearEnd',
-    'ImprovementGradientWithinYear',
-    'BestGoodliftOfYear',
-    'Age',
-    'AvgMeetsPerYear'
-]
+FEATURES = ['TimeSinceLastPBYearEnd',
+ 'BestGoodliftOfYear',
+ 'Age',
+ 'ImprovementGradientWithinYear',
+ 'AvgMeetsPerYear']
 
 
 FINAL_PARAMS =  {'learning_rate': 0.01,
@@ -38,11 +36,8 @@ FINAL_PARAMS =  {'learning_rate': 0.01,
  'min_samples_leaf': 30,
  'l2_regularization': 1}
 
+INTERVENTION_THRESHOLD = 0.62
 
-# FINAL_PARAMS = {
-#     'learning_rate': 0.01,
-#     'max_iter': 750,
-#     'max_depth': 2,
-#     'min_samples_leaf': 5,
-#     'l2_regularization': 0.05
-# }
+MDE = 0.05 
+ALPHA = 0.05
+POWER = 0.8
